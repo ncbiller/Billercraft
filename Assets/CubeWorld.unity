@@ -293,6 +293,8 @@ GameObject:
   - component: {fileID: 1523260710}
   - component: {fileID: 1523260709}
   - component: {fileID: 1523260711}
+  - component: {fileID: 1523260712}
+  - component: {fileID: 1523260713}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
@@ -332,10 +334,34 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1523260708}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41ae7818929e0764fa6be53d8d6cc7af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cubeMaterial: {fileID: 2100000, guid: 53b6b1f21fe384d418bde3fcb6c9d5e4, type: 2}
   bType: 2
+--- !u!114 &1523260712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1523260708}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 421c4b17714d4f54596e97bdc8bed53a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cubeMaterial: {fileID: 2100000, guid: 53b6b1f21fe384d418bde3fcb6c9d5e4, type: 2}
+--- !u!114 &1523260713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1523260708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f4e9f8d501201443b3fd51e41c98829, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textureAtlas: {fileID: 2100000, guid: 53b6b1f21fe384d418bde3fcb6c9d5e4, type: 2}
