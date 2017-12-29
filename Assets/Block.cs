@@ -14,7 +14,7 @@ public class Block {
     Material cubeMaterial;
     GameObject parent;
     Vector3 position;
-    
+    Chunk owner;
 
     Vector2[,] blockUVs =
     {
@@ -28,12 +28,12 @@ public class Block {
                             new Vector2(0,0.9375f), new Vector2(0.0625f, 0.9375f)}
     };
 
-    public Block(BlockType b, Vector3 pos, GameObject p, Material c)
+    public Block(BlockType b, Vector3 pos, GameObject p, Chunk c)
     {
         bType = b;
         parent = p;
         position = pos;
-        cubeMaterial = c;
+        owner = c;
         if (bType == BlockType.AIR)
             isSolid = false;
         else
@@ -156,7 +156,7 @@ public class Block {
 
     public bool  HasSolidNeighbour(int x, int y, int z)
     {
-        Block[,,] blocks = parent.GetComponent<Chunk>().chunkData;
+        Block[,,] blocks = owner.chunkData;
 
         try
         {
