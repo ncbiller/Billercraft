@@ -5,17 +5,32 @@ using UnityEngine;
 public class Chunk : MonoBehaviour {
 
     public Material cubeMaterial;
+    public Block[,,] chunkData;
 
     IEnumerator BuildChunk(int sizeX, int sizeY, int sizeZ)
     {
-        for(int z = 0; z < sizeZ; z++)
+
+        chunkData = new Block[sizeX, sizeY, sizeZ];
+
+        //Create blocks
+        for (int z = 0; z < sizeZ; z++)
+            for (int y = 0; y < sizeY; y++)
+                for (int x = 0; x < sizeX; x++)
+                {
+                    Vector3 pos = new Vector3(x, y, z);
+                    chunkData[x,y,z] = new Block(Block.BlockType.DIRT, pos,
+                        this.gameObject, cubeMaterial);
+
+                }
+
+
+
+
+        for (int z = 0; z < sizeZ; z++)
             for(int y = 0; y< sizeY; y++)
                 for(int x = 0; x< sizeX; x++)
                 {
-                    Vector3 pos = new Vector3(x, y, z);
-                    Block b = new Block(Block.BlockType.DIRT, pos,
-                        this.gameObject, cubeMaterial);
-                    b.Draw();
+                    chunkData[x,y,z].Draw();
                     yield return null;
 
                 }
