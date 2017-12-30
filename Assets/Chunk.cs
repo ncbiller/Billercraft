@@ -10,6 +10,11 @@ public class Chunk {
     public enum ChunkStatus {DRAW,DONE,KEEP};
     public ChunkStatus status;
 
+    List<Vector3> Verts = new List<Vector3>();
+    List<Vector3> Norms = new List<Vector3>();
+    List<Vector2> UVs = new List<Vector2>();
+    List<int> Tris = new List<int>();
+
     void BuildChunk()
     {
 
@@ -60,15 +65,35 @@ public class Chunk {
 
     }
 
-    public void DrawChunk() { 
+    public void DrawChunk() {
+        Verts.Clear();
+        Norms.Clear();
+        UVs.Clear();
+        Tris.Clear();
+
 
         for (int z = 0; z < World.chunkSize; z++)
             for(int y = 0; y< World.chunkSize; y++)
                 for(int x = 0; x< World.chunkSize; x++)
                 {
-                    chunkData[x,y,z].Draw();
+                    chunkData[x,y,z].Draw(Verts, Norms, UVs, Tris);
                 }
-        CombineQuads();
+        Mesh mesh = new Mesh();
+        mesh.name = "ScriptedMesh";
+
+        mesh.vertices = Verts.ToArray();
+        mesh.normals = Norms.ToArray();
+        mesh.uv = UVs.ToArray();
+        mesh.triangles = Tris.ToArray();
+
+        mesh.RecalculateBounds();
+
+        MeshFilter meshFilter = (MeshFilter)chunk.gameObject.AddComponent<MeshFilter>();
+        meshFilter.mesh = mesh;
+
+        MeshRenderer renderer = chunk.gameObject.AddComponent<MeshRenderer>();
+        renderer.material = cubeMaterial;
+
         MeshCollider collider = chunk.gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
         collider.sharedMesh = chunk.transform.GetComponent<MeshFilter>().mesh;
         status = ChunkStatus.DONE;

@@ -7,12 +7,18 @@ using Realtime.Messaging.Internal;
 public class World : MonoBehaviour {
 
     public GameObject player;
-    public Material textureAtlas;
 
-    public static int columnHeight = 16;
+    public Material textureAtlas;
+    public static Vector3[,,] allVertices = new Vector3[18, 18, 18];
+    public static Vector3[] allNormals = new Vector3[6];
+    public enum NDIR { UP, DOWN, LEFT, RIGHT, FRONT, BACK }
+
+
+
+    //public static int columnHeight = 16;
     public static int chunkSize = 16;
-    public static int worldSize = 1;
-    public static int radius = 7;
+    public static int worldSize = 3;
+    public static int radius = 10;
     public static ConcurrentDictionary<string, Chunk> chunks;
 
     //bool building = false;
@@ -111,6 +117,22 @@ public class World : MonoBehaviour {
 
     void Start()
     {
+        //generate all vertices
+        for (int z = 0; z <= chunkSize; z++)
+            for (int y = 0; y <= chunkSize; y++)
+                for (int x = 0; x <= chunkSize; x++)
+                {
+                    allVertices[x, y, z] = new Vector3(x, y, z);
+                }
+
+        allNormals[(int)NDIR.UP] = Vector3.up;
+        allNormals[(int)NDIR.DOWN] = Vector3.down;
+        allNormals[(int)NDIR.LEFT] = Vector3.left;
+        allNormals[(int)NDIR.RIGHT] = Vector3.right;
+        allNormals[(int)NDIR.FRONT] = Vector3.forward;
+        allNormals[(int)NDIR.BACK] = Vector3.back;
+
+
         Vector3 ppos = player.transform.position;
         player.transform.position = new Vector3(ppos.x,
                                                 Utils.GenerateHeight(ppos.x, ppos.z) + 1,
@@ -137,7 +159,7 @@ public class World : MonoBehaviour {
         queue.Run(BuildRecursiveWorld((int)(player.transform.position.x / chunkSize),
             (int)(player.transform.position.y / chunkSize),
             (int)(player.transform.position.z / chunkSize), radius));
-
+         
     } 
 	
 	// Update is called once per frame
