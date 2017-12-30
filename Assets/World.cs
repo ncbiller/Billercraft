@@ -18,14 +18,14 @@ public class World : MonoBehaviour {
     //public static int columnHeight = 16;
     public static int chunkSize = 16;
     public static int worldSize = 3;
-    public static int radius = 10;
+    public static int radius = 6;
     public static ConcurrentDictionary<string, Chunk> chunks;
 
     //bool building = false;
     bool firstbuild = true;
 
     CoroutineQueue queue;
-    public static uint maxCoroutines = 2000;
+    public static uint maxCoroutines = 1000;
 
     public Vector3 lastbuildPos;
 
