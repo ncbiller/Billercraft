@@ -12,7 +12,7 @@ public class World : MonoBehaviour {
     public static Vector3[,,] allVertices = new Vector3[18, 18, 18];
     public static Vector3[] allNormals = new Vector3[6];
     public enum NDIR { UP, DOWN, LEFT, RIGHT, FRONT, BACK }
-
+    bool weasel = false;
 
 
     //public static int columnHeight = 16;
@@ -24,8 +24,10 @@ public class World : MonoBehaviour {
     //bool building = false;
     bool firstbuild = true;
 
+    public static List<string> toRemove = new List<string>();
+
     CoroutineQueue queue;
-    public static uint maxCoroutines = 1000;
+    public static uint maxCoroutines = 4000;
 
     public Vector3 lastbuildPos;
 
@@ -91,6 +93,8 @@ public class World : MonoBehaviour {
 
     IEnumerator DrawChunks()
     {
+       
+
         foreach (KeyValuePair<string, Chunk> c in chunks)
         {
             if (c.Value.status == Chunk.ChunkStatus.DRAW)
@@ -98,11 +102,32 @@ public class World : MonoBehaviour {
                 c.Value.DrawChunk();
                 c.Value.status = Chunk.ChunkStatus.KEEP;
             }
+            if (c.Value.chunk && Vector3.Distance(player.transform.position, c.Value.chunk.transform.position) > radius * chunkSize)
+            {
+                //Debug.Log("Added a Chunk to be removed");
+                toRemove.Add(c.Key);
+            }
 
             yield return null;
         }
     }
 
+    IEnumerator RemoveOldChunks()
+    {
+        for(int i = 0;i < toRemove.Count; i++)
+        {
+            string n = toRemove[i];
+            //Debug.Log(n);
+            Chunk c;
+            if(chunks.TryGetValue(n, out c))
+            {
+                Destroy(c.chunk);
+                chunks.TryRemove(n, out c);
+                //Debug.Log("Die Chunk Die");
+                yield return null;
+            }
+        }
+    }
 
     public void BuildNearPlayer()
     {
@@ -164,12 +189,14 @@ public class World : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+        
         Vector3 movement = lastbuildPos - player.transform.position;
 
         if(movement.magnitude > chunkSize)
         {
             lastbuildPos = player.transform.position;
+
+            toRemove.Clear();
             BuildNearPlayer();
         }
 
@@ -181,5 +208,6 @@ public class World : MonoBehaviour {
         }
 
         queue.Run(DrawChunks());
+        queue.Run(RemoveOldChunks());
     }
 }
