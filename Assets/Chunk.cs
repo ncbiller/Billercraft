@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class Chunk {
@@ -17,6 +18,10 @@ public class Chunk {
 
     void BuildChunk()
     {
+
+        Stopwatch stopWatch = new Stopwatch();
+        stopWatch.Start();
+
 
         chunkData = new Block[World.chunkSize, World.chunkSize, World.chunkSize];
 
@@ -62,10 +67,16 @@ public class Chunk {
                             chunk.gameObject, this);
                     status = ChunkStatus.DRAW;
                 }
+        stopWatch.Stop();
 
+
+        UnityEngine.Debug.Log("Chunk Built: " + chunk.name + " Time: " + stopWatch.Elapsed.Milliseconds);
     }
 
     public void DrawChunk() {
+        Stopwatch stopWatch = new Stopwatch();
+        stopWatch.Start();
+
         Verts.Clear();
         Norms.Clear();
         UVs.Clear();
@@ -97,7 +108,9 @@ public class Chunk {
         MeshCollider collider = chunk.gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
         collider.sharedMesh = chunk.transform.GetComponent<MeshFilter>().mesh;
         status = ChunkStatus.DONE;
+        stopWatch.Stop();
 
+        UnityEngine.Debug.Log("Chunk Rendered: " + chunk.name + " Time: " + stopWatch.Elapsed.Milliseconds);
     }
 
     // Use this for initialization
